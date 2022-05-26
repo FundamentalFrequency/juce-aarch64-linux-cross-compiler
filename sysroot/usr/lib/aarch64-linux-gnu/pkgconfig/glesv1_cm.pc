@@ -1,0 +1,9 @@
+prefix=/usr
+libdir=${prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+Name: GLESv1_CM
+Description: OpenGL ES-CM v1 library and headers.
+Version: 1.0
+Libs: -L${libdir} -lGLESv1_CM
+Cflags: -I${includedir}

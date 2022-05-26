@@ -1,0 +1,9 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+Name: gtk-engines-2
+Description: GTK+ Theme Engines
+Version: 2.20.2
+Requires: gtk+-2.0

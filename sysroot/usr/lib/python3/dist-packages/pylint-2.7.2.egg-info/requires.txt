@@ -1,0 +1,7 @@
+
+[:sys_platform=="win32"]
+colorama
+
+[docs]
+python-docs-theme==2020.12
+sphinx==3.5.1

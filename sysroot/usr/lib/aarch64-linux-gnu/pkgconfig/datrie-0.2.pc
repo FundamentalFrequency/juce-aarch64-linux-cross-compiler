@@ -1,0 +1,10 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+Name: datrie
+Description: Double-array trie library
+Version: 0.2.13
+Libs: -L${libdir} -ldatrie
+Cflags: -I${includedir}

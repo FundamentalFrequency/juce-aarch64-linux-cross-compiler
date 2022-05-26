@@ -1,0 +1,14 @@
+prefix=/usr
+exec_prefix=/usr
+libdir=${prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+datarootdir=${prefix}/share
+datadir=${datarootdir}
+localedir=${datarootdir}/locale
+
+Name: Geany
+Description: A fast and lightweight IDE using GTK+
+Requires: gtk+-3.0 >= 3.0 glib-2.0 >= 2.32
+Version: 1.37.1
+Libs: -L${libdir} -lgeany
+Cflags: -DGTK -I${includedir}/geany -I${includedir}/geany/tagmanager -I${includedir}/geany/scintilla

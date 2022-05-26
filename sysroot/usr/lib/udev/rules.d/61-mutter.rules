@@ -1,0 +1,2 @@
+DRIVER=="tegra-host1x", SUBSYSTEM=="platform", TAG+="mutter-device-requires-kms-modifiers"
+DRIVER=="v3d|vc4-drm", SUBSYSTEM=="platform", TAG+="mutter-device-requires-kms-modifiers"

@@ -1,0 +1,9 @@
+prefix=/usr
+libdir=${prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+Name: GLESv2
+Description: OpenGL ES v2/v3 library and headers.
+Version: 3.2
+Libs: -L${libdir} -lGLESv2
+Cflags: -I${includedir}

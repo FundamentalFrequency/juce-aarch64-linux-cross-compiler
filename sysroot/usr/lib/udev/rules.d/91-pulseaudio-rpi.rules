@@ -1,0 +1,10 @@
+SUBSYSTEM!="sound*", GOTO="end"
+ACTION!="change", GOTO="end"
+KERNEL!="card*", GOTO="end"
+ENV{SOUND_FORM_FACTOR}!="internal", GOTO="end"
+
+DRIVERS=="bcm2835_audio", ATTR{id}=="b1", ENV{PULSE_PROFILE_SET}="rpi-hdmi.conf", GOTO="end"
+DRIVERS=="bcm2835_audio", ATTR{id}=="b2", ENV{PULSE_PROFILE_SET}="rpi-hdmi.conf", GOTO="end"
+DRIVERS=="bcm2835_audio", ATTR{id}=="Headphones", ENV{PULSE_PROFILE_SET}="rpi-analog.conf", GOTO="end"
+
+LABEL="end"

@@ -1,0 +1,10 @@
+[Unit]
+Description=Check for glamor
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/systemd/scripts/glamor_test.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

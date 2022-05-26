@@ -1,0 +1,21 @@
+##############################################################################################################
+# Logitech Mice with CSR battery readouts
+#
+# These are properties defining the behavior:
+#  UPOWER_CSR_DUAL (Dual Receiver)
+#
+SUBSYSTEM!="usb", GOTO="up_csr_end"
+
+ATTR{idVendor}=="046d", ENV{UPOWER_VENDOR}="Logitech, Inc."
+ATTR{idVendor}=="046d", ATTR{idProduct}=="c501", ENV{UPOWER_PRODUCT}="Mouse Receiver", ENV{UPOWER_BATTERY_TYPE}="mouse"
+ATTR{idVendor}=="046d", ATTR{idProduct}=="c502", ENV{UPOWER_PRODUCT}="Dual Receiver", ENV{UPOWER_BATTERY_TYPE}="mouse", ENV{UPOWER_CSR_DUAL}="1"
+ATTR{idVendor}=="046d", ATTR{idProduct}=="c504", ENV{UPOWER_PRODUCT}="Freedom Optical", ENV{UPOWER_BATTERY_TYPE}="mouse", ENV{UPOWER_CSR_DUAL}="1"
+ATTR{idVendor}=="046d", ATTR{idProduct}=="c505", ENV{UPOWER_PRODUCT}="Elite Duo", ENV{UPOWER_BATTERY_TYPE}="keyboard"
+ATTR{idVendor}=="046d", ATTR{idProduct}=="c506", ENV{UPOWER_PRODUCT}="MX700 Optical Mouse", ENV{UPOWER_BATTERY_TYPE}="mouse"
+ATTR{idVendor}=="046d", ATTR{idProduct}=="c508", ENV{UPOWER_PRODUCT}="Optical TrackMan", ENV{UPOWER_BATTERY_TYPE}="mouse"
+ATTR{idVendor}=="046d", ATTR{idProduct}=="c50e", ENV{UPOWER_PRODUCT}="MX1000 Laser Mouse", ENV{UPOWER_BATTERY_TYPE}="mouse"
+ATTR{idVendor}=="046d", ATTR{idProduct}=="c510", ENV{UPOWER_PRODUCT}="Click! Mouse", ENV{UPOWER_BATTERY_TYPE}="mouse"
+ATTR{idVendor}=="046d", ATTR{idProduct}=="c512", ENV{UPOWER_PRODUCT}="Keyboard+Mouse Receiver", ENV{UPOWER_BATTERY_TYPE}="keyboard"
+ATTR{idVendor}=="046d", ATTR{idProduct}=="c702", ENV{UPOWER_PRODUCT}="Presenter", ENV{UPOWER_BATTERY_TYPE}="mouse"
+
+LABEL="up_csr_end"

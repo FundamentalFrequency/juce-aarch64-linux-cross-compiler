@@ -1,0 +1,9 @@
+##############################################################################################################
+# Unifying HID++ devices
+SUBSYSTEM!="hid", GOTO="up_unifying_end"
+# Kernel provides the battery information already
+ATTRS{idVendor}=="046d", TEST=="builtin_power_supply", GOTO="up_unifying_end"
+ATTRS{idVendor}=="046d", ENV{UPOWER_VENDOR}="Logitech, Inc."
+ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c52f", ENV{UPOWER_BATTERY_TYPE}="lg-wireless"
+ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c531", ENV{UPOWER_BATTERY_TYPE}="lg-wireless"
+LABEL="up_unifying_end"

@@ -1,0 +1,11 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+Name: MMAL
+Description: Multi-Media Abstraction Layer library for RPi
+Version: 1
+Requires: vcsm
+Libs: -L${libdir} -lmmal -lmmal_core -lmmal_util -lmmal_vc_client -lbcm_host
+Cflags: -I${includedir}

@@ -1,0 +1,25 @@
+[Unit]
+Description=RPC bind portmap service
+Documentation=man:rpcbind(8)
+DefaultDependencies=no
+RequiresMountsFor=/run/rpcbind
+
+# Make sure we use the IP addresses listed for
+# rpcbind.socket, no matter how this unit is started.
+Requires=rpcbind.socket
+After=systemd-tmpfiles-setup.service
+Wants=remote-fs-pre.target rpcbind.target
+Before=remote-fs-pre.target rpcbind.target
+
+[Service]
+Environment="OPTIONS=-w"
+ExecStart=/sbin/rpcbind -f $OPTIONS
+EnvironmentFile=-/etc/rpcbind.conf
+EnvironmentFile=-/etc/default/rpcbind
+Type=notify
+KillMode=process
+Restart=on-failure
+
+[Install]
+Also=rpcbind.socket
+WantedBy=multi-user.target

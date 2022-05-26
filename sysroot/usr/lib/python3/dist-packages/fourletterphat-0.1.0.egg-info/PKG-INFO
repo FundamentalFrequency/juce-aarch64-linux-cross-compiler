@@ -1,0 +1,41 @@
+Metadata-Version: 1.1
+Name: fourletterphat
+Version: 0.1.0
+Summary: Four Letter pHAT Driver
+Home-page: http://www.pimoroni.com
+Author: Philip Howard
+Author-email: phil@pimoroni.com
+License: MIT
+Description: 0.1.0
+        -----
+        
+        * Improvement: deferred setup to avoid side-effects upon import
+        * Improvement: raise exception when missing smbus, rather than hard exit()
+        * BugFix: fixed print_str not blanking unused characters
+        
+        0.0.2
+        -----
+        
+        * New: set_blink method to enable built-in blink
+        * New: set_brightness method to change display brightness
+        * New: glow method for glowing/pulsing effects
+        * New: print_scroll method for scrolling text
+        * Improvement: speed optimisation by switching to block i2c write
+        
+        0.0.1
+        -----
+        
+        * Initial release
+        
+        
+Keywords: Raspberry Pi LED
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: POSIX :: Linux
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development
+Classifier: Topic :: System :: Hardware

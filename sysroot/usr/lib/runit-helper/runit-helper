@@ -1,0 +1,187 @@
+#!/bin/sh
+# Copyright (C) 2017 Dmitry Bogatov <KAction@gnu.org>
+
+# Author: Dmitry Bogatov <KAction@gnu.org>
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 3
+# of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+# rescan and invoke-rc.d actions are done only if runit is init
+is_runit () {
+	[ -f  /run/runit.stopit ]
+}
+
+is_installed () {
+	[ -f  /sbin/runit ]
+}
+
+# No-Op if the service is not enabled
+# sv can't send signals to a disabled service
+is_enabled () {
+	[ -h /etc/service/"$NAME" ]
+}
+
+# workaround for races as in #919296
+ok_pipe () {
+	[ -p "/etc/sv/$NAME/supervise/ok" ]
+}
+
+postinst () {
+	local action="${1}" previous="${2:-}"
+
+	# loguser transition: to be removed when the transition is done 
+	# we do ths before enable to avoid races
+	# old loguser is 'runit-log', new is '_runit-log'
+	# 'current' and 'lock' files in the run directory must be owned by
+	# the new loguser
+	if [ "${ENABLE}" = yes ] && \
+		[ -f "/var/log/runit/$NAME/current" ] ; then
+		loguser="$(stat --format '%U' /var/log/runit/$NAME/current)"
+		if [ "${loguser}" = "runit-log" ]; then
+			sv d "/etc/sv/$NAME/log" >/dev/null || true
+			chown _runit-log:adm /var/log/runit/$NAME/current
+			chown _runit-log:adm /var/log/runit/$NAME/lock
+		fi
+	fi
+
+	# It is important to not override local admin
+	# decision (see #899242 and 942323 ).
+	if [ "${ENABLE}" = yes ] && \
+		[ ! -h "/etc/runit/runsvdir/default/.$NAME" ] ; then
+		# avoid infinte loop of symlinks
+		if [ ! -h "/etc/runit/runsvdir/default/$NAME" ]; then
+			ln -sf "/etc/sv/$NAME" "/etc/runit/runsvdir/default/$NAME"
+			if is_runit ; then
+				# always force a rescan after enable
+				kill -s ALRM 1
+			fi
+		fi
+	fi
+	# ENABLE=no is always a no-op
+
+	# Upgrade will changes destination of /etc/sv/{name}/supervise symlink from
+	# /var/* to /run/*. If service was running, it important that its supervise
+	# directory is still accessible via /etc/sv/{name}/supervise symlink.
+	#
+	# This code must be removed once there are no more packages with
+	# /etc/sv/{name}/supervise -> /var/lib/runit/supervise/{name}
+	mkdir -p /run/runit/supervise
+
+	old="/var/lib/runit/supervise/${NAME}" 
+	new="/run/runit/supervise/${NAME}"
+	if [ -d "${old}" ] ; then
+		ln -sf "${old}" "${new}"
+	fi
+
+	old="/var/lib/runit/log/supervise/${NAME}" 
+	new="/run/runit/supervise/${NAME}.log"
+	if [ -d "${old}" ] ; then
+		ln -sf "${old}" "${new}"
+	fi
+
+	# loguser transition: to be removed when the transition is done
+	# we do this after enable to reduce chance of races
+	if [ "${ENABLE}" = yes ] && \
+		[ -f "/etc/sv/$NAME/log/run" ] ; then
+		if is_installed ; then
+			sv u "/etc/sv/$NAME/log" >/dev/null || true
+		fi
+	fi
+
+	#invoke-rc.d
+	if is_runit ; then
+		if [ "${action}" = 'configure' ] || [ "${action}" = 'abort-upgrade' ] || \
+			[ "${action}" = 'abort-deconfigure' ] || [ "${action}" = 'abort-remove' ] ; then
+			if [ "${ONUPGRADE}" = restart ] && [ -n "${previous}" ] && is_enabled && ok_pipe ; then
+				sv restart ${NAME} || true
+			elif [ "${ONUPGRADE}" = reload ] && [ -n "${previous}" ] && is_enabled && ok_pipe ; then
+				sv reload ${NAME} || true
+			elif is_enabled && ok_pipe ; then
+				# ONUPGRADE=stop || ONUPGRADE=nostop
+				# ONUPGRADE= restart || reload and [ ! -n "${previous}" ]
+				sv start ${NAME} || true
+			else
+				return 0
+			fi
+		fi
+	fi
+}
+
+prerm () {
+	local action="${1}"
+	# invoke-rc.d
+	if is_runit ; then
+		if [ "${ONUPGRADE}" = stop ] && is_enabled && ok_pipe ; then
+			sv stop ${NAME} || true
+		elif [ "${action}" = 'remove' ] && is_enabled && ok_pipe ; then
+			# ONUPGRADE=restart || ONUPGRADE=nostop
+			sv stop ${NAME} || true
+		else
+			return 0
+		fi
+	fi	
+}
+
+postrm () {
+	local action="${1}"
+
+	if [ "${action}" != 'purge' ] && [ "${action}" != 'remove' ] ; then
+	    return
+	fi
+
+	# When "ENABLE=no" the $NAME link is an admin decision
+	# so we don't remove it.
+	# Links in other runsvdirs is responsibility of administrator.
+	if [ "${action}" = 'remove' ] && [ "${ENABLE}" = yes ] ; then
+		rm -f "/etc/runit/runsvdir/default/$NAME"
+	fi
+
+	# If runscript was never invoked, there will be no files
+	# in this directory, and `dpkg' will remove it. In this case,
+	# we have nothing to do.
+	for supervise in "/var/lib/runit/supervise/$NAME" \
+	                 "/var/lib/runit/log/supervise/$NAME" ; do
+		if [ -d "$supervise" ] ; then
+
+			# Actually only `down' may be absent, but it does not
+			# matter.
+
+			for file in control lock ok pid stat status down ; do
+				rm -f "$supervise/$file"
+			done
+
+			# It should be empty now. If it is not, it means that
+			# system administrator put something there. It is very
+			# stupid, but will of user is sacred, and directory is
+			# left as-is in such case.
+			#
+			# NOTE: Non-POSIX option is used. The day coreutils will
+			# no longer be essential, it will require a fix.
+			rmdir --ignore-fail-on-non-empty "$supervise"
+		fi
+	done
+
+	if [ "${action}" = 'purge' ] ; then
+		rm -f "/etc/runit/runsvdir/default/$NAME"
+		rm -f "/etc/runit/runsvdir/default/.$NAME"
+		readonly logdir="/var/log/runit/${NAME}"
+		if [ -d "${logdir}" ] ; then
+			rm -r "${logdir}"
+		fi
+	fi
+}
+
+"$@"
+# vim: sw=4:et

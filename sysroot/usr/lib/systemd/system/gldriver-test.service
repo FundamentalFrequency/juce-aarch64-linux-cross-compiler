@@ -1,0 +1,10 @@
+[Unit]
+Description=Check for v3d driver
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/systemd/scripts/gldriver_test.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

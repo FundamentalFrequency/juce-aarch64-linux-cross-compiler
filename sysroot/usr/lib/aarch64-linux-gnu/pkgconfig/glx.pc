@@ -1,0 +1,9 @@
+prefix=/usr
+libdir=${prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+Name: GLX
+Description: GLX library and headers.
+Version: 1.4
+Libs: -L${libdir} -lGLX
+Cflags: -I${includedir}

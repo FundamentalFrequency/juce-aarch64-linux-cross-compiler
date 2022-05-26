@@ -1,0 +1,14 @@
+Metadata-Version: 1.1
+Name: pigpio
+Version: 1.78
+Summary: Raspberry Pi GPIO module
+Home-page: http://abyz.me.uk/rpi/pigpio/python.html
+Author: joan
+Author-email: joan@abyz.me.uk
+License: unlicense.org
+Download-URL: http://abyz.me.uk/rpi/pigpio/pigpio.zip
+Description: Raspberry Pi Python module to access the pigpio daemon
+Keywords: raspberrypi,gpio
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3

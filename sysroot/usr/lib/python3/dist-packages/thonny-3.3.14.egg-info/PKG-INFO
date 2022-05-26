@@ -1,0 +1,42 @@
+Metadata-Version: 1.2
+Name: thonny
+Version: 3.3.14
+Summary: Python IDE for beginners
+Home-page: https://thonny.org
+Author: Aivar Annamaa and others
+Author-email: thonny@googlegroups.com
+License: MIT
+Project-URL: Source code, https://github.com/thonny/thonny
+Project-URL: Bug tracker, https://github.com/thonny/thonny/issues
+Description: Thonny is a simple Python IDE with features useful for learning programming. See https://thonny.org for more info.
+Keywords: IDE education debugger
+Platform: Windows
+Platform: macOS
+Platform: Linux
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: MacOS X
+Classifier: Environment :: Win32 (MS Windows)
+Classifier: Environment :: X11 Applications
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: Freeware
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Education
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Debuggers
+Classifier: Topic :: Text Editors
+Requires-Python: >=3.5

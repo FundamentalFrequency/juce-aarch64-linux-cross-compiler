@@ -1,0 +1,134 @@
+#!/bin/sh
+
+USAGE="Usage: `basename $0` description command..."
+
+#-------------defaults and overrides-------------
+cd `dirname "$0"`
+
+PREFER_SUDO=true
+# Don't prefer sudo on redhat-based systems, as it's not setup by default
+if [ -f /etc/redhat-release ]; then
+  PREFER_SUDO=false
+fi
+
+if [ x"$KEEP_PATH" '!=' xtrue ] ; then
+  PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11
+fi
+case `uname -s` in
+  SunOS) PATH=$PATH:/usr/sfw/bin:/usr/gnu/bin:/usr/xpg4/bin:/usr/xpg6/bin:/usr/openwin/bin:/usr/ucb ;;
+  AIX) PATH=$PATH:/opt/freeware/bin:/opt/freeware/sbin ;;
+esac
+
+case `uname -s` in
+  SunOS) which() { ksh whence -p "$@"; } ;;
+  HP-UX) which() { command -v "$@"; } ;;
+esac
+
+#-------------helper functions--------------------
+perform_substitutions() {
+  SUB_CMD=s/DESCRIPTION/`sed_escape "$DESCRIPTION"`/';
+         's/COMMAND_SINGLE_ARG/`sed_escape "$COMMAND_SINGLE_ARG"`/';
+         's/COMMAND/`sed_escape "$COMMAND"`/
+  out=`echo "$1" | sed -e "$SUB_CMD"`
+  printf %s "$out"
+}
+
+launch(){
+  OLD_IFS="$IFS"
+  IFS="= "
+  CFGFILE="$1"
+  CMDID="$2"
+  exec 5<&0 < "$CFGFILE"
+  while read key value; do
+    IFS="$OLD_IFS"
+    if [ "$key" = "$CMDID" ]; then
+      pr="$value"
+      set $pr
+      if which "$1" 2>/dev/null >&2 ; then
+        [ -n "$COMMAND_PRETTY" ] || COMMAND_PRETTY="$1"
+        DESCRIPTION=`printf "$DESCR" "$COMMAND_PRETTY"`
+        DESCRIPTION=`bash_escape "$DESCRIPTION"`
+        COMMAND_SINGLE_ARG=`bash_escape "$COMMAND"`
+        EXEC_CMD=`perform_substitutions "$value"`
+        echo "executing $CMDID: $EXEC_CMD" >&2
+        eval "$EXEC_CMD"
+        exit 0
+      fi
+    fi
+    IFS="= "
+  done
+  exec 0<&5 5<&-
+  IFS="$OLD_IFS"
+}
+
+launch_su(){
+  if which su >/dev/null 2>&1 ; then
+    COMMAND_PRETTY=su
+    launch "$CONFIG_FILE" SU_LAUNCHCMD
+  fi
+}
+
+launch_sudo(){
+  if which sudo >/dev/null 2>&1 ; then
+    COMMAND_PRETTY=sudo
+    launch "$CONFIG_FILE" SUDO_LAUNCHCMD
+  fi
+}
+
+bash_escape() {
+  # backtick indirection strictly necessary here: we use it to strip the
+  # trailing newline from sed's output, which Solaris/BSD sed *always* output
+  # (unlike GNU sed, which outputs "test": printf %s test | sed -e s/dummy//)
+  out=`echo "$1" | sed -e s/\\'/\\''\\\\'\\'\\'/g`
+  printf \'%s\' "$out"
+}
+append_bash_escape() {
+  [ -z "$1" ] || printf "%s " "$1"
+  bash_escape "$2"
+}
+sed_escape() {
+  out=`echo "$1" | sed -e 's/[\\/&]/\\\\&/g'`
+  printf %s "$out"
+}
+
+#-------------script--------------------
+
+if [ $# -lt 2 ] ; then
+  echo "$USAGE"
+  exit 1
+fi
+
+DESCR="$1" ; shift
+COMMAND=
+while [ $# -gt 0 ] ; do
+  COMMAND=`append_bash_escape "$COMMAND" "$1"` ; shift
+done
+
+if [ -z "$COMMAND" ] ; then
+  echo "$USAGE"
+  exit 1
+fi
+
+CONFIG_FILE="vncelevatecfg.custom"
+if [ ! -r "$CONFIG_FILE" ]; then
+  CONFIG_FILE="vncelevatecfg"
+  if [ ! -r "$CONFIG_FILE" ]; then
+    echo "could not find vncelevatecfg or vncelevatecfg.custom"
+    exit 1
+  fi
+fi
+
+#look for a valid custom command
+launch "$CONFIG_FILE" CUSTOM_COMMAND
+
+if [ "$PREFER_SUDO" = "true" ]; then
+  launch_sudo
+  launch_su
+else
+  launch_su
+  launch_sudo
+fi
+
+#we expect to have launched by now; return error
+echo "could not elevate"
+exit 1

@@ -1,0 +1,11 @@
+prefix=/usr
+libdir=${prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+dridriverdir=/usr/lib/aarch64-linux-gnu/dri
+
+Name: dri
+Description: Direct Rendering Infrastructure
+Version: 20.3.5
+Requires.private: libdrm >=  2.4.102
+Cflags: -I${includedir}

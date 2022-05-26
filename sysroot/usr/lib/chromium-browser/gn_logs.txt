@@ -1,0 +1,6 @@
+Generated during 'gn gen' by //BUILD.gn.
+
+#### get_concurrent_links.py ####
+per_link_gb=16 reserve_gb=10 secondary_per_link_gb=0
+cpu_count=80 cpu_cap=6 mem_total_gb=115.6GiB
+concurrent_links=6  (reason: cpu_cap (thinlto))

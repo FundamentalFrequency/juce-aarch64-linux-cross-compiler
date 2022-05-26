@@ -1,0 +1,104 @@
+Metadata-Version: 1.2
+Name: logilab-common
+Version: 1.8.1
+Summary: collection of low-level Python packages and modules used by Logilab projects
+Home-page: http://www.logilab.org/project/logilab-common
+Author: Logilab
+Author-email: contact@logilab.fr
+License: LGPL
+Description: Logilab's common library
+        ========================
+        
+        What's this ?
+        -------------
+        
+        This package contains some modules used by different Logilab projects.
+        
+        It is released under the GNU Lesser General Public License.
+        
+        There is no documentation available yet but the source code should be clean and
+        well documented.
+        
+        Designed to ease:
+        
+        * handling command line options and configuration files
+        * writing interactive command line tools
+        * manipulation of files and character strings
+        * manipulation of common structures such as graph, tree, and pattern such as visitor
+        * generating text and HTML reports
+        * more...
+        
+        Documentation
+        -------------
+        
+        Documentation is available at https://logilab-common.readthedocs.io/
+        
+        Installation
+        ------------
+        
+        logilab-common is available on pypi so you can install it using pip ::
+        
+            pip install logilab-common
+        
+        Or alternatively extract the tarball, jump into the created directory and run ::
+        
+            python setup.py install
+        
+        For installation options, see ::
+        
+            python setup.py install --help
+        
+        
+        Building the documentation
+        --------------------------
+        
+        Create a virtualenv and install dependencies ::
+        
+            virtualenv venv
+            source venv/bin/activate
+        
+            # you need the krb5-config command to build all dependencies
+            # on debian you can get it using "apt-get install libkrb5-dev"
+        
+            pip install doc/requirements-doc.txt
+        
+            # install logilab-common
+            pip install -e .
+        
+        Then build the doc ::
+        
+            cd doc
+            make html
+        
+        It's now available under `doc/_build/html/`
+        
+        Code style
+        ----------
+        
+        The python code is verified against *flake8* and formatted with *black*.
+        
+        * You can run `tox -e black` to check that the files are well formatted.
+        * You can run `tox -e black-run` to format them if needed.
+        * You can include the `.hgrc` to your own `.hgrc` to automatically run black
+          before each commit/amend. This can be done by writing `%include ../.hgrc` at
+          the end of your `.hgrc`.
+        
+        Comments, support, bug reports
+        ------------------------------
+        
+        Project page https://www.logilab.org/project/logilab-common
+        
+        Use the cubicweb-devel at lists.cubicweb.org mailing list.
+        
+        You can subscribe to this mailing list at
+        https://lists.cubicweb.org/mailman/listinfo/cubicweb-devel
+        
+        Archives are available at
+        https://lists.cubicweb.org/pipermail/cubicweb-devel/
+        
+Platform: UNKNOWN
+Classifier: Topic :: Utilities
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.6

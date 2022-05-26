@@ -1,0 +1,40 @@
+Metadata-Version: 1.1
+Name: Cap1xxx
+Version: 0.1.3
+Summary: A module to drive various Microchip cap1xxx touch ICs
+Home-page: http://shop.pimoroni.com
+Author: Philip Howard
+Author-email: phil@pimoroni.com
+License: MIT
+Description: 0.1.3
+        -----
+        
+        * Fixed LED rise/fall rate method
+        
+        0.1.2
+        -----
+        
+        * Initial commit to Raspbian apt repository
+        
+        0.1.1
+        -----
+        
+        * Increased delay in polling loop to avoid CPU hogging
+        
+        0.0.2
+        -----
+        
+        * Many little bugfixes, for an actually working library
+        
+        
+Keywords: Raspberry Pi
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: POSIX :: Linux
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development
+Classifier: Topic :: System :: Hardware

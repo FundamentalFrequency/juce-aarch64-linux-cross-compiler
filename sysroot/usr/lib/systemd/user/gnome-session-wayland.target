@@ -1,0 +1,10 @@
+[Unit]
+Description=GNOME Wayland Session
+# Avoid default After/Before rules
+DefaultDependencies=no
+
+Before=gnome-session.target
+
+PartOf=graphical-session.target
+RefuseManualStart=yes
+RefuseManualStop=yes

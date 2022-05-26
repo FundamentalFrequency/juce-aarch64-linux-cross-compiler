@@ -1,0 +1,44 @@
+Metadata-Version: 1.1
+Name: pysmbc
+Version: 1.0.23
+Summary: Python bindings for libsmbclient
+Home-page: https://github.com/hamano/pysmbc
+Author: ['Tim Waugh <twaugh@redhat.com>', 'Tsukasa Hamano <hamano@osstech.co.jp>', 'Roberto Polli <rpolli@babel.it>']
+Author-email: UNKNOWN
+License: GPLv2+
+Description: This is a set of Python bindings for the libsmbclient library
+        from the samba project.
+        
+        >>> # Directory listing example:
+        >>> import smbc
+        >>> ctx = smbc.Context (auth_fn=my_auth_callback_fn)
+        >>> entries = ctx.opendir ("smb://SERVER").getdents ()
+        >>> for entry in entries:
+        ...     print entry
+        <smbc.Dirent object "music" (File share) at 0x7fbd7c42b3a0>
+        <smbc.Dirent object "IPC$" (IPC share) at 0x7fbd7c42b148>
+        <smbc.Dirent object "Charlie" (Printer share) at 0x7fbd7c42b3c8>
+        >>> d = ctx.open ("smb://SERVER/music")
+        
+        >>> # Write file example:
+        >>> import smbc
+        >>> import os
+        >>> ctx = smbc.Context (auth_fn=my_auth_callback_fn)
+        >>> file = ctx.open ("smb://SERVER/music/file.txt", os.O_CREAT | os.O_WRONLY)
+        >>> file.write ("hello")
+        
+        >>> # Read file example:
+        >>> import smbc
+        >>> ctx = smbc.Context (auth_fn=my_auth_callback_fn)
+        >>> file = ctx.open ("smb://SERVER/music/file.txt")
+        >>> print file.read()
+        hello
+        
+        
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: C

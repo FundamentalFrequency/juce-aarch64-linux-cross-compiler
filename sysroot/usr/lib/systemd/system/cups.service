@@ -1,0 +1,14 @@
+[Unit]
+Description=CUPS Scheduler
+Documentation=man:cupsd(8)
+After=network.target sssd.service ypbind.service nslcd.service
+Requires=cups.socket
+
+[Service]
+ExecStart=/usr/sbin/cupsd -l
+Type=notify
+Restart=on-failure
+
+[Install]
+Also=cups.socket cups.path
+WantedBy=printer.target

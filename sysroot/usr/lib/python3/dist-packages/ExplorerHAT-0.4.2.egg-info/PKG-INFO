@@ -1,0 +1,57 @@
+Metadata-Version: 1.1
+Name: ExplorerHAT
+Version: 0.4.2
+Summary: A module to control the Explorer HAT Raspberry Pi Addon Board
+Home-page: http://shop.pimoroni.com
+Author: Philip Howard
+Author-email: phil@pimoroni.com
+License: MIT
+Description: Learn more: https://shop.pimoroni.com/products/explorer-hat
+        Learn more: https://shop.pimoroni.com/products/explorer-phat
+        
+        0.4.2
+        -----
+        
+        * Initial release to Raspbian Apt repository
+        
+        0.4.1
+        -----
+        
+        * Dropped junk files from package
+        * Refactor into package
+        
+        0.4.0
+        -----
+        
+        * Restructure to include pins/ads1015 in package
+        * Dropped captouch from manifest
+        
+        0.3.0
+        -----
+        
+        * Added support for Explorer pHAT
+        * Better device detection
+        
+        0.2.0
+        -----
+        
+        * Updated to depend upon common cap1xxx library
+        * Hopefully supports Python 3
+        
+        0.1.1
+        -----
+        
+        * Added analog changed function
+        
+        
+Keywords: Raspberry Pi Explorer HAT
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: POSIX :: Linux
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development
+Classifier: Topic :: System :: Hardware

@@ -1,0 +1,12 @@
+[Unit]
+Description=VNC Server in Virtual Mode daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/vncserver-virtuald -fg
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

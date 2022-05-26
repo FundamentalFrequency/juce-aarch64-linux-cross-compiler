@@ -1,0 +1,29 @@
+[Unit]
+Description=GNOME XSettings service
+CollectMode=inactive-or-failed
+RefuseManualStart=true
+RefuseManualStop=true
+
+After=gnome-session-initialized.target
+
+# Requisite/PartOf means the dependency is not loaded automatically.
+# The ordering here also implies Before=gnome-session.target
+Requisite=org.gnome.SettingsDaemon.XSettings.target
+PartOf=org.gnome.SettingsDaemon.XSettings.target
+Before=org.gnome.SettingsDaemon.XSettings.target
+
+Requisite=gnome-session-x11-services.target gnome-session-x11-services-ready.target
+PartOf=gnome-session-x11-services.target gnome-session-x11-services-ready.target
+After=gnome-session-x11-services.target
+Before=gnome-session-x11-services-ready.target
+
+[Service]
+Slice=session.slice
+Type=dbus
+ExecStart=/usr/libexec/gsd-xsettings
+Restart=on-abnormal
+BusName=org.gnome.SettingsDaemon.XSettings
+TimeoutStopSec=5
+# We cannot use OnFailure as e.g. dependency failures are normal
+# https://github.com/systemd/systemd/issues/12352
+ExecStopPost=/usr/libexec/gnome-session-ctl --exec-stop-check

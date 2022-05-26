@@ -1,0 +1,47 @@
+Metadata-Version: 1.1
+Name: mote
+Version: 0.0.4
+Summary: Mote LED Driver
+Home-page: http://www.pimoroni.com
+Author: Philip Howard
+Author-email: phil@pimoroni.com
+License: MIT
+Description: 
+        Learn more: https://shop.pimoroni.com/products/mote
+        
+        0.0.4
+        -----
+        
+        * Feature: added set_all
+        * Feature: added set_white_point
+        * Feature: added optional clear on exit
+        * Feature: added brightness support to set_pixel
+        
+        0.0.3
+        -----
+        
+        * Added __version__ to module
+        * Initial release to Raspbian apt repository
+        
+        0.0.2
+        -----
+        
+        * Added PySerial as dependency
+        
+        0.0.1
+        -----
+        
+        * Initial Release
+        
+        
+Keywords: Raspberry Pi IoT Displays LCD LED
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: POSIX :: Linux
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development
+Classifier: Topic :: System :: Hardware

@@ -1,0 +1,61 @@
+Metadata-Version: 1.1
+Name: skywriter
+Version: 0.0.7
+Summary: Skywriter HAT Driver
+Home-page: http://www.pimoroni.com
+Author: Philip Howard
+Author-email: phil@pimoroni.com
+License: MIT
+Description: Learn more: https://shop.pimoroni.com/products/skywriter-hat
+        0.0.7
+        -----
+        
+        * Removed dependency upon smbus
+        * Tweak to Pi version detection
+        
+        0.0.6
+        -----
+        
+        * Added sleep in _do_poll
+        * Fixed weird reset logic
+        * Raising exception on bad firmware
+        
+        0.0.5
+        -----
+        
+        * Tweak to allow the odd IOError
+        
+        0.0.4
+        -----
+        
+        * Added repeat_rate to touch decorator
+        
+        0.0.3
+        -----
+        
+        * Tidying up
+        
+        0.0.2
+        -----
+        
+        * Many changes and fixes
+        
+         
+        
+        0.0.1
+        -----
+        
+        * Initial release
+        
+        
+Keywords: Raspberry Pi Skywriter Gesture HAT
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: POSIX :: Linux
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development
+Classifier: Topic :: System :: Hardware

@@ -1,0 +1,10 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+Name: VCSM
+Description: VideoCore Shared Memory library for RPi
+Version: 1
+Libs: -L${libdir} -lvcsm -lvcos
+Cflags: -I${includedir}

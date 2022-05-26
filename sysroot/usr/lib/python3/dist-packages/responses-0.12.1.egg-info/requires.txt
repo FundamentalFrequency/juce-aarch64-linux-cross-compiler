@@ -1,0 +1,18 @@
+
+[:python_version < "3.3"]
+mock
+
+[:python_version < "3.4"]
+cookies
+
+[tests]
+coverage<6.0.0,>=3.7.1
+flake8
+pytest-cov
+pytest-localserver
+
+[tests:python_version < "3.5"]
+pytest<5.0,>=4.6
+
+[tests:python_version >= "3.5"]
+pytest>=4.6

@@ -1,0 +1,14 @@
+[Unit]
+Description=GNOME Session (session: %i)
+DefaultDependencies=no
+RefuseManualStart=yes
+RefuseManualStop=yes
+
+Requires=gnome-session-initialized.target
+After=gnome-session-initialized.target
+
+Requisite=gnome-session.target
+PartOf=gnome-session.target
+Before=gnome-session.target
+
+Requires=gnome-session-manager@.service

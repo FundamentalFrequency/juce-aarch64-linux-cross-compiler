@@ -1,0 +1,10 @@
+
+[qa]
+flake8==3.8.3
+mypy==0.782
+
+[testing]
+Django<3.1
+colorama
+docopt
+pytest<6.0.0

@@ -1,0 +1,61 @@
+Metadata-Version: 1.1
+Name: sn3218
+Version: 1.2.7
+Summary: A module to drive the sn3218 i2c LED controller
+Home-page: http://www.pimoroni.com
+Author: Jonathan Williamson
+Author-email: jon@pimoroni.com
+License: MIT
+Description: 1.2.7
+        -----
+        
+        * Bugfix: Fix for Python 3.5
+        
+        1.2.6
+        -----
+        
+        * Initial commit to Raspbian apt repository
+        
+        1.2.5
+        -----
+        
+        * Initial commit to Raspbian apt repository
+        
+        1.2.4
+        -----
+        
+        * Added alternate warning/instructions for missing python3-smbus
+        * Code quality improvements
+        
+        1.2.3
+        -----
+        
+        * Print fix
+        
+        1.2.2
+        -----
+        
+        * Added i2c_bus_id detection for older Pi
+        
+        1.2.1
+        -----
+        
+        * Removed hard dependancy upon SMbus, added message at runtime
+        
+        1.0.0
+        -----
+        
+        * Initial release
+        
+        
+Keywords: Raspberry Pi sn3218 i2c
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: POSIX :: Linux
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development
+Classifier: Topic :: System :: Hardware

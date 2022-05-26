@@ -1,0 +1,169 @@
+Metadata-Version: 1.1
+Name: microdotphat
+Version: 0.2.1
+Summary: Micro Dot pHAT Driver
+Home-page: http://www.pimoroni.com
+Author: Philip Howard
+Author-email: phil@pimoroni.com
+License: MIT
+Description: |Micro Dot pHAT| https://shop.pimoroni.com/products/microdot-phat
+        
+        Micro Dot pHAT is an unashamedly old school LED matrix display board,
+        with up to 30x7 pixels, using the Lite-On LTP-305 matrices. Perfect for
+        building a retro scrolling message display or a tiny 30 band spectrum
+        analyser.
+        
+        Installing
+        ----------
+        
+        Full install (recommended):
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        We've created an easy installation script that will install all
+        pre-requisites and get your Micro Dot pHAT up and running with minimal
+        efforts. To run it, fire up Terminal which you'll find in Menu ->
+        Accessories -> Terminal on your Raspberry Pi desktop, as illustrated
+        below:
+        
+        .. figure:: http://get.pimoroni.com/resources/github-repo-terminal.png
+           :alt: Finding the terminal
+        
+        In the new terminal window type the command exactly as it appears below
+        (check for typos) and follow the on-screen instructions:
+        
+        .. code:: bash
+        
+            curl https://get.pimoroni.com/microdotphat | bash
+        
+        Alternatively, on Raspbian, you can download the ``pimoroni-dashboard``
+        and install your product by browsing to the relevant entry:
+        
+        .. code:: bash
+        
+            sudo apt-get install pimoroni
+        
+        (you will find the Dashboard under 'Accessories' too, in the Pi menu -
+        or just run ``pimoroni-dashboard`` at the command line)
+        
+        If you choose to download examples you'll find them in
+        ``/home/pi/Pimoroni/microdotphat/``.
+        
+        Manual install:
+        ~~~~~~~~~~~~~~~
+        
+        Library install for Python 3:
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        
+        on Raspbian:
+        
+        .. code:: bash
+        
+            sudo apt-get install python3-microdotphat
+        
+        other environments:
+        
+        .. code:: bash
+        
+            sudo pip3 install microdotphat
+        
+        Library install for Python 2:
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        
+        on Raspbian:
+        
+        .. code:: bash
+        
+            sudo apt-get install python-microdotphat
+        
+        other environments:
+        
+        .. code:: bash
+        
+            sudo pip2 install microdotphat
+        
+        Development:
+        ~~~~~~~~~~~~
+        
+        If you want to contribute, or like living on the edge of your seat by
+        having the latest code, you should clone this repository, ``cd`` to the
+        library directory, and run:
+        
+        .. code:: bash
+        
+            sudo python3 setup.py install
+        
+        (or ``sudo python setup.py install`` whichever your primary Python
+        environment may be)
+        
+        In all cases you will have to enable the i2c bus.
+        
+        Documentation & Support
+        -----------------------
+        
+        -  Guides and tutorials - https://learn.pimoroni.com/microdot-phat
+        -  Function reference - http://docs.pimoroni.com/microdotphat/
+        -  GPIO Pinout - https://pinout.xyz/pinout/micro\_dot\_phat
+        -  Get help - http://forums.pimoroni.com/c/support
+        
+        Unofficial / Third-party libraries
+        ----------------------------------
+        
+        -  Java library by Jim Darby - https://github.com/hackerjimbo/PiJava
+        
+        .. |Micro Dot pHAT| image:: https://raw.githubusercontent.com/pimoroni/microdot-phat/master/microdot-phat-logo.png
+        
+        0.2.1
+        -----
+        
+        * BugFix: Call setup within set_brightness, fixes #20
+        
+        0.2.0
+        -----
+        
+        * BugFix: Defer setup to avoid import side effects
+        * BugFix: Reset scroll X and Y to zero when cleared
+        * Feature: Added Japanese text support
+        
+        0.1.3
+        -----
+        
+        * Added __version__ string to module
+        * Added degrees symbol
+        * Added mirroring: flip display left to right
+        * Added DocStrings
+        
+        0.1.2
+        -----
+        
+        * Added set_decimal for toggling decimal places
+        * Replaced clear_on_exit with set_clear_on_exit method
+        * Added support for 180 degree rotation
+        
+        0.1.1
+        -----
+        
+        * Added set_brightness
+        
+        0.1.0
+        -----
+        
+        * Vertical scrolling
+        * Tweaks to write_string
+        
+        0.0.1
+        -----
+        
+        * Initial Release
+        
+        
+Keywords: Raspberry Pi IoT Displays LCD LED
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: POSIX :: Linux
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development
+Classifier: Topic :: System :: Hardware

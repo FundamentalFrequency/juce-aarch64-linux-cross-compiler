@@ -1,0 +1,16 @@
+#!/bin/sh
+if [ $# -lt 6 ]; then
+  IN=-_
+else
+  IN="$6"
+fi
+
+TMPFILE=`mktemp /tmp/pstotiff.XXXXXX` || exit 1
+gs -I/usr/share/cups/fonts -dNOINTERPOLATE -sDEVICE=tiffg4 -dMaxStripSize=0 -r204x196 \
+    -dNOPAUSE -dBATCH -dSAFER -dPARANOIDSAFER \
+   -dSHORTERRORS -dWRITESYSTEMDICT -dGHOSTSCRIPT \
+   -sstdout=%stderr -sOutputFile="$TMPFILE" "$IN"
+RET=$?
+cat "$TMPFILE"
+rm -f "$TMPFILE"
+exit $RET

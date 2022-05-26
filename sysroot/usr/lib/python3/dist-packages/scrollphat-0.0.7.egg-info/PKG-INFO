@@ -1,0 +1,64 @@
+Metadata-Version: 1.1
+Name: scrollphat
+Version: 0.0.7
+Summary: Scroll pHAT Driver
+Home-page: http://www.pimoroni.com
+Author: Philip Howard
+Author-email: phil@pimoroni.com
+License: MIT
+Description: Learn more: https://shop.pimoroni.com/products/scroll-phat
+        
+        0.0.7
+        -----
+        
+        * Added __version__ to module
+        * added DocStrings
+        * minor fixes to missing smbus warning
+        
+        0.0.6
+        -----
+        
+        * set_buffer
+        * rotate setting now a set_rotation method
+        * tidy up
+        
+        0.0.5
+        -----
+        
+        * precompiled font to list
+        * suppressed IO error flood
+        
+        0.0.4
+        -----
+        
+        * removed dependencies satisfied by apt
+        
+        0.0.3
+        -----
+        
+        * various bug fixes
+        
+        0.0.2
+        -----
+        
+        * program and install bug fixes
+        
+         
+        
+        0.0.1
+        -----
+        
+        * Initial release
+        
+        
+Keywords: Raspberry Pi LED
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: POSIX :: Linux
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development
+Classifier: Topic :: System :: Hardware

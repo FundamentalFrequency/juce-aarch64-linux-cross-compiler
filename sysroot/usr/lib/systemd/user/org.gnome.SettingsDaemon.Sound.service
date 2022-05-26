@@ -1,0 +1,26 @@
+[Unit]
+Description=GNOME sound sample caching service
+CollectMode=inactive-or-failed
+RefuseManualStart=true
+RefuseManualStop=true
+
+After=gnome-session-initialized.target
+
+# Requisite/PartOf means the dependency is not loaded automatically.
+# The ordering here also implies Before=gnome-session.target
+Requisite=org.gnome.SettingsDaemon.Sound.target
+PartOf=org.gnome.SettingsDaemon.Sound.target
+Before=org.gnome.SettingsDaemon.Sound.target
+
+
+
+[Service]
+Slice=session.slice
+Type=dbus
+ExecStart=/usr/libexec/gsd-sound
+Restart=on-failure
+BusName=org.gnome.SettingsDaemon.Sound
+TimeoutStopSec=5
+# We cannot use OnFailure as e.g. dependency failures are normal
+# https://github.com/systemd/systemd/issues/12352
+ExecStopPost=/usr/libexec/gnome-session-ctl --exec-stop-check

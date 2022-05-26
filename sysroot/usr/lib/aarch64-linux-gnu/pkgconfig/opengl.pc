@@ -1,0 +1,9 @@
+prefix=/usr
+libdir=${prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+Name: OpenGL
+Description: OpenGL (without GLX) library and headers.
+Version: 4.5
+Libs: -L${libdir} -lOpenGL
+Cflags: -I${includedir}

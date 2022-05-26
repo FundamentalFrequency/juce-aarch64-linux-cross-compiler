@@ -1,0 +1,11 @@
+prefix=/usr
+libdir=${prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+datarootdir=${prefix}/share
+datadir=${prefix}/share
+
+Name: libglvnd
+Description: Vendor-neutral OpenGL dispatch library vendor interface
+Version: 1.3.2
+Cflags: -I${includedir}

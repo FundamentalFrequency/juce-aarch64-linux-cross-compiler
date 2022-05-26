@@ -1,0 +1,16 @@
+
+[all]
+chardet>=2.2
+genshi
+
+[all:platform_python_implementation == 'CPython']
+lxml
+
+[chardet]
+chardet>=2.2
+
+[genshi]
+genshi
+
+[lxml:platform_python_implementation == 'CPython']
+lxml

@@ -1,0 +1,13 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=/usr/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+targets=x11 broadway wayland
+
+Name: GDK
+Description: GTK+ Drawing Kit
+Version: 3.24.24
+Requires: pango pangocairo gdk-pixbuf-2.0 >= 2.30.0 cairo >= 1.14.0 cairo-gobject >= 1.14.0
+Requires.private: gio-unix-2.0 >= 2.57.2 fontconfig x11 xext xinerama xi xrandr xcursor xfixes xcomposite xdamage wayland-client >= 1.14.91 wayland-protocols >= 1.17 xkbcommon >= 0.2.0 wayland-cursor >= 1.14.91 wayland-egl  cairo-xlib cairo cairo epoxy >= 1.4   fribidi >= 0.19.7
+Libs: -L${libdir} -lgdk-3 
+Cflags: -I${includedir}/gtk-3.0 

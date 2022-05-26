@@ -1,0 +1,9 @@
+prefix=/usr
+libdir=${prefix}/lib/aarch64-linux-gnu
+includedir=${prefix}/include
+
+Name: GL
+Description: Legacy OpenGL and GLX library and headers.
+Version: 1.2
+Libs: -L${libdir} -lGL
+Cflags: -I${includedir}

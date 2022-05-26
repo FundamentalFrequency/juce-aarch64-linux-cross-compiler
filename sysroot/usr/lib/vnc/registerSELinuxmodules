@@ -1,0 +1,327 @@
+#!/bin/sh
+
+# Copyright © 2002-2020 RealVNC Ltd.  All rights reserved.
+
+locate_cmd() {
+  cmd=$1
+  shift
+  if command -v $cmd >/dev/null 2>&1; then
+    return 0
+  else
+    for p in $@; do
+      if test -x $p/$cmd; then
+        echo "Checking for $cmd... [Not in path]"
+        return 1
+      fi
+    done
+  fi
+  echo "Checking for $cmd... [Not found]"
+  return 2
+}
+
+#### vars
+hasCheckModule=-1
+hasSEManage=-1
+hasSEModule=-1
+hasRestoreCon=-1
+hasGetEnforce=-1
+hasSEBins=-1
+
+PATH=$PATH:/usr/sbin:/sbin
+
+
+#### Helpers
+getMinModuleVersion() {
+  output=`checkmodule -V | sed 's|[^0-9]*||' | sed 's|[^0-9].*||' `
+  echo $output
+}
+
+getMaxModuleVersion() {
+  output=`checkmodule -V | sed 's|[^0-9]*||' | sed 's|[0-9]*[^0-9]*||' `
+  echo $output
+}
+
+
+# File formats are to be in the form [ModuleName]-V[ModuleNumber]
+# this may be revised later when we find that Centos and Fedora are so different
+# note that to make life easy for sort, module numbers should all be 2 chars 
+getPPModuleVersion() {
+  fileName=$1
+  output=`echo $fileName | sed 's|.*-V||' | sed 's|[^0-9].*||' `
+  echo $output 
+}
+
+
+#### Do we have selinux binaries?
+locate_checkmodule() {
+  if [ $hasCheckModule -lt 0 ]; then
+    locate_cmd checkmodule
+    hasCheckModule=$?
+  fi
+  return $hasCheckModule
+}
+
+locate_SEManage() {
+  if [ $hasSEManage -lt 0 ]; then
+    locate_cmd semanage
+    hasSEManage=$?
+  fi
+  return $hasSEManage
+}
+
+locate_SEModule() {
+  if [ $hasSEModule -lt 0 ]; then
+    locate_cmd semodule
+    hasSEModule=$?
+  fi
+  return $hasSEModule
+}
+
+locate_Restorecon() {
+  if [ $hasRestoreCon -lt 0 ]; then
+    locate_cmd restorecon
+    hasRestoreCon=$?
+  fi
+  return $hasRestoreCon
+}
+
+locate_GetEnforce() {
+  if [ $hasGetEnforce -lt 0 ]; then
+    locate_cmd getenforce
+    hasGetEnforce=$?
+  fi
+  return $hasGetEnforce
+}
+
+
+#### Work out what SELinux module should work with this system
+#### and if that fails to install, it will attempt all other versions
+installSEModule() {
+  moduleDir=$1
+  moduleName=$2
+
+  viableModules=`ls ${moduleDir}/${moduleName}-V*.pp | sort -r`
+  maxModVersion=`getMaxModuleVersion`
+  minModVersion=`getMinModuleVersion`
+  
+  for moduleFile in ${viableModules} ; do
+    modVersion=`getPPModuleVersion $moduleFile`
+    if [ "$modVersion" -le "$maxModVersion" ] && \
+       [ "$modVersion" -ge "$minModVersion" ]; then
+      echo -n "Installing SELinux policy module $moduleName for SELinux version $modVersion - this may take a while... "
+      if semodule -i "${moduleFile}" ; then
+        echo "[OK]"
+        return 0
+      fi
+      echo "[ERROR]"
+    fi
+  done
+  
+  return 1
+}
+
+
+## this could be made faster - by trying to grep for all of them at once...
+isSEModuleGroupInstalled() {
+  for module in "$@"; do
+    name=`isSEModuleInstalled "${module}"`
+    if [ $? -eq 0 ]; then
+      echo $name
+      return 0
+    fi
+  done
+  return 1
+}
+
+
+## returns 0 if installed
+## returns 1 otherwise
+## prints out the name of the module that can be uninstalled if it was found
+## so something like
+## name=`isSEModuleInstalled server`
+## if [ $? -eq 0 ]; then ....
+isSEModuleInstalled() {
+  moduleName=$1
+  # On different RHEL/Fedora versions, semodule prints module names in various
+  # ways:
+  #   * it may or may not have tab-separated columns
+  #     ("<module-name><tab><other info>")
+  #   * module names may be of the form "realvnc-server-V17" (named with the
+  #     SELinux module version) or may be just "realvnc-server"
+  foundName=`semodule -l | grep -E "^${moduleName}(-V[0-9][0-9])?(\s|$)" 2>/dev/null`
+  if [ $? -eq 0 ]; then
+    echo "$foundName" | cut -f1
+    return 0
+  fi
+  
+  return 1
+}
+
+
+removeOldSEModules() {
+  for module in $oldSEModules; do
+    removeSEModule $module
+  done
+}
+
+
+removeSEModule() {
+  moduleName=$1
+  if locate_SEModule; then
+    modName=`isSEModuleInstalled "${moduleName}"`
+    if [ $? -eq 0 ]; then
+      echo "Removing existing SELinux policy module $1" 
+      semodule -r "$modName"
+    fi
+  fi
+}
+
+# These are the files we edit about with regarding SELinux permssions
+# so we have this function to reset the permissions on them if required
+restorePermissions() {
+  binDir=$1
+  if locate_Restorecon; then
+    restorecon -R $binDir/vncserver-x11-serviced \
+                  $binDir/vncserver-virtuald \
+                  $binDir/Xvnc
+  fi
+}
+
+
+# We shouldn't attempt to install SELinux modules if it's disabled.
+selinuxenabled=-1
+isSELinuxEnabled() {
+  if [ $selinuxenabled -lt 0 ]; then
+    if locate_GetEnforce; then
+      enforceStatus=`getenforce`
+      echo -n "Testing if SELinux enabled... "
+      if test "$enforceStatus" = "Disabled" ; then
+        echo "[Disabled]"
+        selinuxenabled=1
+      else
+        echo "[Enabled]"
+        selinuxenabled=0
+      fi
+    else
+      selinuxenabled=1
+    fi
+  fi
+  
+  return $selinuxenabled
+}
+
+
+# Fedora 18+ messes with the SELinux label of Xvnc because our binary has the
+# same path as the open-source Xvnc, so Fedora's xserver_selinux(8) is applied to it.
+SELinux_installFedoraCorrection() {
+  binDir=$1
+
+  if ! isSELinuxEnabled; then
+    return
+  fi
+
+  if ls -Z $binDir/Xvnc 2>/dev/null | grep xserver_exec_t >/dev/null 2>&1; then
+    if locate_Restorecon && locate_SEManage; then
+      semanage fcontext -a -t bin_t $binDir/Xvnc
+      restorePermissions $binDir
+      echo "Xvnc SELinux permissions repaired."
+    else
+      echo
+      echo "WARNING: semanage (policycoreutils-python) was not found. Before the system"
+      echo "         is next relabelled, install it and run the following command:"
+      echo "                  semanage fcontext -a -t bin_t $binDir/Xvnc"
+      chcon -t bin_t $binDir/Xvnc || true
+    fi
+  fi
+}
+
+
+SELinux_installModules() {
+  dataDir=$1
+  binDir=$2
+  
+  if ! isSELinuxEnabled; then
+    return
+  fi
+  
+  if ! locate_checkmodule ; then
+    echo "WARNING: Unable to install selinux modules as checkmodule is not in path"
+    echo "Please correct and run vncinitconfig -register-SELinux"
+    return
+  fi
+  
+  if locate_SEModule ; then
+    if ! installSEModule $dataDir realvnc-server ; then
+      echo
+      echo "WARNING: failed to install selinux module on your system."
+      echo "Please run vncinitconfig -register-SELinux once the errors are resolved"
+    fi
+  
+    # For cups - if there are any really old versions of the module, then we can 
+    # just do nothing; we don't replace these directly.  We can probably warn the user
+    # that we're not trying anything though - incase they actually care
+    installSECups=1
+    installedItem=`isAncientSEModuleInstalled`
+    if [ $? -eq 0 ]; then
+      echo
+      echo "Outdated SELinux policy module discovered [$installedItem]"
+      echo "If you encounter printing issues, remove this policy module and run vncinitconfig -register-SELinux"
+      installSECups=0
+    elif isOldSEModuleInstalled ; then
+      removeOldSEModules
+    fi
+
+    if [ $installSECups -eq 1 ] && \
+       ! installSEModule $dataDir realvnc-server-cups; then
+      echo
+      echo "WARNING: failed to install SELinux cups module"
+      echo "printing may not work as expected"
+    fi
+
+    restorePermissions $binDir
+  fi
+}
+
+
+SELinux_removeModules() {
+  binDir=$1
+  removeSEModule realvnc-server-cups
+  removeSEModule realvnc-server
+  
+  if locate_SEManage; then
+    semanage fcontext -d -t bin_t ${bindir}/Xvnc 2>/dev/null || true
+  fi
+}
+
+
+## modules that we don't replace
+ancientSEModules="cupsvncfc7
+              cupsvncfc8
+              cupsvncfc9
+              cupsvncfedora11"
+
+## modules that we replace
+oldSEModules="cupsvncfedora17
+               cupsvncrhel5
+               cupsvncrhel6"
+
+
+isAncientSEModuleInstalled() {
+  ret=`isSEModuleGroupInstalled $ancientSEModules`
+  if [ $? -eq 0 ]; then
+    echo $ret
+    return 0
+  else
+    return 1
+  fi
+}
+
+
+isOldSEModuleInstalled() {
+  ret=`isSEModuleGroupInstalled $oldSEModules`
+  if [ $? -eq 0 ]; then
+    return 0
+  else
+    return 1
+  fi
+}

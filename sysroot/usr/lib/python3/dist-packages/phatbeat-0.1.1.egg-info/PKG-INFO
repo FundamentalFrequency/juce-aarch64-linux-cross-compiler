@@ -1,0 +1,47 @@
+Metadata-Version: 1.1
+Name: phatbeat
+Version: 0.1.1
+Summary: Python library for driving Pimoroni pHAT BEAT!
+Home-page: http://www.pimoroni.com
+Author: Philip Howard
+Author-email: phil@pimoroni.com
+License: MIT
+Description: 
+        Python library for PHAT BEAT, a stereo DAC, AMP and VU meter with 5 input buttons for the Raspberry Pi.
+        
+        Learn more: https://shop.pimoroni.com/products/phat-beat
+        0.1.1
+        -----
+        
+        * Bugfix: Added sleep on clock to prevent unstable output on Pi 3B+ under load
+        
+        0.1.0
+        -----
+        
+        * Bugfix: Deferred initialisation to prevent import side-effects
+        * Bugfix: Implemented EOF for newer APA102 part
+        
+        0.0.2
+        -----
+        
+        * Bugfix: Corrected (reversed) order of pixels in second bar
+        * New: Optional threading for button handlers
+        * New: Added hold() to attach a handler to a button hold event
+        
+        0.0.1
+        -----
+        
+        * Initial release
+        
+        
+Keywords: Raspberry Pi LED
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: POSIX :: Linux
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development
+Classifier: Topic :: System :: Hardware
